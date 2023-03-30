@@ -1,4 +1,4 @@
-import { gql } from ("apollo-server-express");
+import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
   type User {
@@ -23,29 +23,16 @@ const typeDefs = gql`
     READ
   }
 
-  type Query {
-    getBooks(collection: Collection): [Book]
-    getBook(bookId: ID!): Book
-  }
-
   type Mutation {
     login(username: String!, password: String!): User!
     register(username: String!, email: String!, password: String!): User!
-    addBook(title: String!, author: String!, date: String!, coverImage: String!, collection: Collection!): Book!
-    updateBook(bookId: ID!, title: String, author: String, date: String, coverImage: String, collection: Collection): Book!
-    finishBook(bookId: ID!, rating: Int!): Book!
   }
 
-  type Subscription {
-    bookFinished: BookUpdate!
+type Query {
+    getBooks(collection: String): [Book]
+    getBook(bookId: ID!): Book
   }
-
-  type BookUpdate {
-    bookId: ID!
-    title: String!
-    date: String!
-    rating: Int!
-  }
+ 
 `;
 
 export default typeDefs;
