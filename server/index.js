@@ -3,16 +3,32 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import typeDefs from "./graphql/schema/schema.graphql.js";
-import Mutation from "./graphql/resolvers/Mutation.js";
+import UserMutation from "./graphql/resolvers/mutations/User.mutation.js";
+import BookMutation from "./graphql/resolvers/mutations/Book.mutation.js";
 import { MONGODB_URI } from "./constants/env-keys.js";
+import upload from "./utils/fileUpload.js";
 
 
 const app = express();
 app.use(cors());
+
+app.use("/uploads", express.static("uploads"));
+
+app.post("/upload", upload.single("coverImage"), (req, res) => {
+    res.status(200).json({
+        message: "File uploaded successfully",
+        file: req.file.path,
+    });
+});
+
+
 const server = new ApolloServer({
     typeDefs,
     resolvers: {
-        Mutation,
+        Mutation: {
+            ...UserMutation,
+            ...BookMutation
+        }
     },
     context: ({ req }) => ({ req }),
 });

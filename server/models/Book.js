@@ -1,4 +1,4 @@
-const { model, Schema } = require("mongoose");
+import { model, Schema } from "mongoose";
 
 const bookSchema = new Schema({
     title: {
@@ -17,7 +17,7 @@ const bookSchema = new Schema({
         type: String,
         required: true,
     },
-    collection: {
+    collectionType: {
         type: String,
         enum: ["WANT_TO_READ", "READING", "READ"],
         required: true,

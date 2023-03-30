@@ -14,10 +14,10 @@ const typeDefs = gql`
     author: String!
     date: String!
     coverImage: String!
-    collection: Collection!
+    collectionType: collectionType!
   }
 
-  enum Collection {
+  enum collectionType {
     WANT_TO_READ
     READING
     READ
@@ -26,10 +26,13 @@ const typeDefs = gql`
   type Mutation {
     login(username: String!, password: String!): User!
     register(username: String!, email: String!, password: String!): User!
+    addBook(title: String!, author: String!, date: String!, coverImage: String!, collectionType: collectionType!): Book!
+    updateBook(bookId: ID!, title: String, author: String, date: String, coverImage: String, collectionType: collectionType): Book!
+    finishBook(bookId: ID!, rating: Int!): Book!
   }
 
 type Query {
-    getBooks(collection: String): [Book]
+    getBooks(collectionType: String): [Book]
     getBook(bookId: ID!): Book
   }
  

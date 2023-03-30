@@ -1,10 +1,10 @@
-import { JWT_SECRET } from "../../constants/env-keys.js";
-
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../../models/User.js";
 
-const Mutation = {
+import { JWT_SECRET } from "../../../constants/env-keys.js";
+import User from "../../../models/User.js";
+
+const UserMutation = {
     async register(_, { username, email, password }) {
         const user = await User.findOne({ username });
 
@@ -55,6 +55,6 @@ const Mutation = {
 
 };
 
-export default Mutation;
+export default UserMutation;
 
 
