@@ -1,4 +1,5 @@
 
+import checkAuth from "./../../../utils/auth.js"
 import Book from "../../../models/Book.js";
 
 const BookMutation = {
