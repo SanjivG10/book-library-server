@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import typeDefs from "./graphql/schema/schema.graphql.js";
 import UserMutation from "./graphql/resolvers/mutations/User.mutation.js";
 import BookMutation from "./graphql/resolvers/mutations/Book.mutation.js";
+import Query from "./graphql/resolvers/Query.js";
 import { MONGODB_URI } from "./constants/env-keys.js";
 import upload from "./utils/fileUpload.js";
 
@@ -28,7 +29,8 @@ const server = new ApolloServer({
         Mutation: {
             ...UserMutation,
             ...BookMutation
-        }
+        },
+        Query
     },
     context: ({ req }) => ({ req }),
 });

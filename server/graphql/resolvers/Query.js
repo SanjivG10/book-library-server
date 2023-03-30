@@ -1,5 +1,5 @@
-import Book from "../models/Book";
-import checkAuth from "../utils/auth";
+import Book from "../../models/Book.js";
+import checkAuth from "../../utils/auth.js";
 
 const Query = {
     async getBooks(_, { collectionType }, context) {
