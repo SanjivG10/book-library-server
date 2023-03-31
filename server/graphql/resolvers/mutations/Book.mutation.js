@@ -36,7 +36,7 @@ const BookMutation = {
         if (author) book.author = author;
         if (date) book.date = date;
         if (coverImage) book.coverImage = coverImage;
-        if (collection) book.collectionType = collectionType;
+        if (collectionType) book.collectionType = collectionType;
 
         const updatedBook = await book.save();
         return updatedBook;

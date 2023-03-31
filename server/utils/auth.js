@@ -18,14 +18,9 @@ const checkAuth = (context) => {
 
     try {
         const user = jwt.verify(token, JWT_SECRET);
-        const newToken = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "1h" });
-
-        return {
-            ...user,
-            token: newToken,
-        };
+        return user;
     } catch (err) {
-        console.log(err)
+        console.log(err);
         throw new AuthenticationError("Invalid/Expired token");
     }
 };
