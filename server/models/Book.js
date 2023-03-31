@@ -34,4 +34,10 @@ const bookSchema = new Schema({
     },
 });
 
+bookSchema.statics.findWithPagination = async function (limit, page) {
+    const skip = (page - 1) * limit;
+    const books = await this.find().skip(skip).limit(limit).sort({ "_id": -1 });
+    return books;
+};
+
 export default model("Book", bookSchema);

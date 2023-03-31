@@ -17,6 +17,17 @@ const Query = {
             throw new Error(err);
         }
     },
+    async getAllBooks(_, { limit = 10, page = 1 }, context) {
+        try {
+            const books = await Book.findWithPagination(limit, page);
+            const totalCount = await Book.countDocuments();
+            return { items: books, totalCount };
+
+
+        } catch (err) {
+            throw new Error(err);
+        }
+    },
 
     async getBook(_, { bookId }, context) {
         try {

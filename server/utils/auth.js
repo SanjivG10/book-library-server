@@ -20,7 +20,6 @@ const checkAuth = (context) => {
         const user = jwt.verify(token, JWT_SECRET);
         return user;
     } catch (err) {
-        console.log(err);
         throw new AuthenticationError("Invalid/Expired token");
     }
 };

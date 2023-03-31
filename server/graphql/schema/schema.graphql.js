@@ -33,10 +33,15 @@ const typeDefs = gql`
     finishBook(bookId: ID!, rating: Int!): Book!
   }
 
-  
+type PaginatedBook {
+  items: [Book]
+  totalCount: Int
+}  
 
 type Query {
     getBooks(collectionType: String): [Book]
+    getAllBooks(page:Int,limit:Int): PaginatedBook
+    
     getBook(bookId: ID!): Book
     me: User!
   }
