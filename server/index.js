@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 import typeDefs from "./graphql/schema/schema.graphql.js";
 import UserMutation from "./graphql/resolvers/mutations/User.mutation.js";
 import BookMutation from "./graphql/resolvers/mutations/Book.mutation.js";
-import Query from "./graphql/resolvers/Query.js";
+import BookQuery from "./graphql/resolvers/queries/Book.query.js";
+import MeQuery from "./graphql/resolvers/queries/me.query.js";
 import { MONGODB_URI } from "./constants/env-keys.js";
 import upload from "./utils/fileUpload.js";
 
@@ -30,11 +31,13 @@ const server = new ApolloServer({
             ...UserMutation,
             ...BookMutation
         },
-        Query
+        Query: {
+            ...BookQuery,
+            ...MeQuery
+        }
     },
     context: ({ req }) => ({ req }),
 });
-
 
 
 (async () => {

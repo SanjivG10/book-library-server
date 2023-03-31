@@ -19,6 +19,29 @@ const BookMutation = {
 
         return book;
     },
+
+    async updateBook(_, { bookId, title, author, date, coverImage, collectionType }, context) {
+        const user = checkAuth(context);
+        const book = await Book.findById(bookId);
+
+        if (!book) {
+            throw new Error("Book not found");
+        }
+
+        if (book.user.toString() !== user.id) {
+            throw new Error("Unauthorized");
+        }
+
+        if (title) book.title = title;
+        if (author) book.author = author;
+        if (date) book.date = date;
+        if (coverImage) book.coverImage = coverImage;
+        if (collection) book.collectionType = collectionType;
+
+        const updatedBook = await book.save();
+        return updatedBook;
+
+    }
 }
 
 export default BookMutation;

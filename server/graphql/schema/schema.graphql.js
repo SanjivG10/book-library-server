@@ -8,6 +8,7 @@ const typeDefs = gql`
     token: String!
   }
 
+
   type Book {
     id: ID!
     title: String!
@@ -31,9 +32,12 @@ const typeDefs = gql`
     finishBook(bookId: ID!, rating: Int!): Book!
   }
 
+  
+
 type Query {
     getBooks(collectionType: String): [Book]
     getBook(bookId: ID!): Book
+    me: User!
   }
  
 `;
