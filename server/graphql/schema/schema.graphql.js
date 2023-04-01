@@ -18,6 +18,7 @@ const typeDefs = gql`
     coverImage: String!
     user:String!
     rating: Int
+    collectionType: collectionType
   }
 
   enum collectionType {
@@ -62,8 +63,8 @@ const typeDefs = gql`
   }
 
 type PaginatedBook {
-  items: [Book]
-  totalCount: Int
+  books: [Book]
+  hasMore: Boolean
 }  
 
 type CurrentUserBookStatus {
@@ -73,7 +74,7 @@ type CurrentUserBookStatus {
 }
 
 type Query {
-    getBooks(collectionType: String): [Book]
+    getUserBooks(collectionType: collectionType!,page:Int,limit:Int): PaginatedBook 
     getAllBooks(page:Int,limit:Int): PaginatedBook
     getBook(bookId: ID!): Book
 
