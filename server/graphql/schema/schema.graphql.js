@@ -50,6 +50,7 @@ const typeDefs = gql`
   }
 
 
+
   type Mutation {
     login(username: String!, password: String!): User!
     register(username: String!, email: String!, password: String!): User!
@@ -71,6 +72,17 @@ type CurrentUserBookStatus {
     collectionType: collectionType
     rating: Int
     finished: Boolean
+}
+
+type BookUpdate {
+  title: String!
+  date: String!
+  username: String!
+  rating: Int!
+}
+
+type Subscription {
+  bookUpdate: BookUpdate!
 }
 
 type Query {

@@ -23,13 +23,32 @@ const BookMutation = {
     async addOrUpdateRating(_, { bookId, rating }, context) {
         const user = checkAuth(context);
         const existingRating = await UserRating.findOne({ user: user.id, book: bookId });
+        const book = await Book.findById(bookId);
 
         if (existingRating) {
             existingRating.rating = rating;
             await existingRating.save();
+
+            context.pubsub.publish("BOOK_UPDATED", {
+                bookUpdate: {
+                    username: user.username,
+                    title: book.title,
+                    date: new Date().toISOString(),
+                    rating,
+                },
+            });
+
             return existingRating;
         } else {
             const newRating = await UserRating.create({ user: user.id, book: bookId, rating });
+            context.pubsub.publish("BOOK_UPDATED", {
+                bookUpdate: {
+                    username: user.username,
+                    title: book.title,
+                    date: new Date().toISOString(),
+                    rating,
+                },
+            });
             return newRating;
         }
     },
