@@ -9,17 +9,16 @@ const bookSchema = new Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        required: true,
+    },
     date: {
         type: String,
         required: true,
     },
     coverImage: {
         type: String,
-        required: true,
-    },
-    collectionType: {
-        type: String,
-        enum: ["WANT_TO_READ", "READING", "READ"],
         required: true,
     },
     rating: {

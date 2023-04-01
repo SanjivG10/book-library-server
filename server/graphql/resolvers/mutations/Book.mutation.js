@@ -3,7 +3,7 @@ import checkAuth from "./../../../utils/auth.js"
 import Book from "../../../models/Book.js";
 
 const BookMutation = {
-    async addBook(_, { title, author, date, coverImage, collectionType }, context) {
+    async addBook(_, { title, author, date, coverImage, description }, context) {
         const user = checkAuth(context);
 
         const newBook = new Book({
@@ -11,7 +11,7 @@ const BookMutation = {
             author,
             date,
             coverImage,
-            collectionType,
+            description,
             user: user.id,
         });
 
@@ -20,7 +20,7 @@ const BookMutation = {
         return book;
     },
 
-    async updateBook(_, { bookId, title, author, date, coverImage, collectionType }, context) {
+    async updateBook(_, { bookId, title, author, date, coverImage, description }, context) {
         const user = checkAuth(context);
         const book = await Book.findById(bookId);
 
@@ -34,9 +34,9 @@ const BookMutation = {
 
         if (title) book.title = title;
         if (author) book.author = author;
+        if (description) book.description = description;
         if (date) book.date = date;
         if (coverImage) book.coverImage = coverImage;
-        if (collectionType) book.collectionType = collectionType;
 
         const updatedBook = await book.save();
         return updatedBook;
