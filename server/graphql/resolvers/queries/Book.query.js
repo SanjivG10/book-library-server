@@ -31,15 +31,9 @@ const Query = {
 
     async getBook(_, { bookId }, context) {
         try {
-            const user = checkAuth(context);
             const book = await Book.findById(bookId);
-
             if (!book) {
                 throw new Error("Book not found");
-            }
-
-            if (book.user.toString() !== user.id) {
-                throw new Error("Unauthorized");
             }
 
             return book;
