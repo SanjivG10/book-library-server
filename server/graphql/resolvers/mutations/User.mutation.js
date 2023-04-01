@@ -22,7 +22,7 @@ const UserMutation = {
 
         const res = await newUser.save();
 
-        const token = jwt.sign({ id: res.id, username: res.username }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: res.id, username: res.username }, JWT_SECRET, { expiresIn: "3h" });
 
         return {
             ...res._doc,
@@ -44,7 +44,7 @@ const UserMutation = {
             throw new Error("Invalid credentials");
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "3h" });
 
         return {
             ...user._doc,
