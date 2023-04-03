@@ -3,9 +3,14 @@ import jwt from "jsonwebtoken";
 
 import { JWT_SECRET } from "../../../constants/env-keys.js";
 import User from "../../../models/User.js";
+import { userValidationSchema } from "../../../validator/user.validator.js";
 
 const UserMutation = {
     async register(_, { username, email, password }) {
+        const { error } = userValidationSchema.Mutation.register.validate({ username, email, password });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const user = await User.findOne({ username });
 
         if (user) {
@@ -32,6 +37,10 @@ const UserMutation = {
     },
 
     async login(_, { username, password }) {
+        const { error } = userValidationSchema.Mutation.login.validate({ username, password });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const user = await User.findOne({ username });
 
         if (!user) {

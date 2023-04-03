@@ -4,6 +4,7 @@ import checkAuth from "../../../utils/auth.js";
 import Bookshelf from "../../../models/UserBookShelf.js"
 import UserRating from "../../../models/UserRating.js"
 import UserFinishedBook from "../../../models/UserFinishBook.js"
+import { bookValidationSchema } from "../../../validator/book.validator.js";
 
 
 const DESCRIPTION_LENGTH = 50;
@@ -11,6 +12,10 @@ const DESCRIPTION_LENGTH = 50;
 const Query = {
     async getUserBooks(_, { collectionType, limit = 10, page = 1 }, context) {
         const user = checkAuth(context);
+        const { error } = bookValidationSchema.Query.getUserBooks.validate({ collectionType, limit, page });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const pageLimit = Math.min(limit, 10);
 
         const bookIds = await Bookshelf
@@ -35,6 +40,10 @@ const Query = {
 
     },
     async getAllBooks(_, { limit = 10, page = 1 }, context) {
+        const { error } = bookValidationSchema.Query.getAllBooks.validate({ limit, page });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const pageLimit = Math.min(limit, 10);
         const books = await Book.findWithPagination(pageLimit + 1, page);
         const booksWithCutOffDescription = books.map((book) => ({ ...book._doc, description: book._doc.description.substring(0, DESCRIPTION_LENGTH), id: book._doc._id })) || []
@@ -43,6 +52,10 @@ const Query = {
     },
 
     async getBook(_, { bookId }, context) {
+        const { error } = bookValidationSchema.Query.getBook.validate({ bookId });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const book = await Book.findById(bookId);
         if (!book) {
             throw new Error("Book not found");
@@ -52,6 +65,10 @@ const Query = {
     },
 
     async userBookStatus(_, { bookId }, context) {
+        const { error } = bookValidationSchema.Query.userBookStatus.validate({ bookId });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const user = checkAuth(context);
         const book = await Book.findById(bookId);
         const userRating = await UserRating.findOne({ book: book.id, user: user.id });

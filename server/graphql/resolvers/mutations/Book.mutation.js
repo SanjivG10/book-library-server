@@ -4,10 +4,16 @@ import Book from "../../../models/Book.js";
 import UserFinishBook from "../../../models/UserFinishBook.js";
 import UserShelf from "../../../models/UserBookShelf.js";
 import UserRating from "../../../models/UserRating.js";
+import { bookValidationSchema } from "../../../validator/book.validator.js";
+
 
 const BookMutation = {
     async finishBook(_, { bookId }, context) {
         const user = checkAuth(context);
+        const { error } = bookValidationSchema.Mutation.finishBook.validate({ bookId });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const existingFinishedBook = await UserFinishBook.findOne({ user: user.id, book: bookId });
 
         if (existingFinishedBook) {
@@ -22,6 +28,10 @@ const BookMutation = {
 
     async addOrUpdateRating(_, { bookId, rating }, context) {
         const user = checkAuth(context);
+        const { error } = bookValidationSchema.Mutation.addOrUpdateRating.validate({ bookId, rating });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const existingRating = await UserRating.findOne({ user: user.id, book: bookId });
         const book = await Book.findById(bookId);
 
@@ -55,6 +65,10 @@ const BookMutation = {
 
     async addOrUpdateBookshelf(_, { bookId, collectionType }, context) {
         const user = checkAuth(context);
+        const { error } = bookValidationSchema.Mutation.addOrUpdateBookshelf.validate({ bookId, collectionType });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const existingBookShelf = await UserShelf.findOne({ user: user.id, book: bookId });
 
         if (existingBookShelf) {
@@ -70,6 +84,10 @@ const BookMutation = {
 
     async addBook(_, { title, author, date, coverImage, description }, context) {
         const user = checkAuth(context);
+        const { error } = bookValidationSchema.Mutation.addBook.validate({ title, author, date, coverImage, description });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
 
         const newBook = new Book({
             title,
@@ -87,6 +105,10 @@ const BookMutation = {
 
     async updateBook(_, { bookId, title, author, date, coverImage, description }, context) {
         const user = checkAuth(context);
+        const { error } = bookValidationSchema.Mutation.updateBook.validate({ title, author, date, coverImage, description, bookid });
+        if (error) {
+            throw new Error(`Input validation error: ${error.message}`);
+        }
         const book = await Book.findById(bookId);
 
         if (!book) {
