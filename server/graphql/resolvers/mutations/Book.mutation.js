@@ -5,6 +5,7 @@ import UserFinishBook from "../../../models/UserFinishBook.js";
 import UserShelf from "../../../models/UserBookShelf.js";
 import UserRating from "../../../models/UserRating.js";
 import { bookValidationSchema } from "../../../validator/book.validator.js";
+import { v4 } from "uuid";
 
 
 const BookMutation = {
@@ -41,6 +42,7 @@ const BookMutation = {
 
             context.pubsub.publish("BOOK_UPDATED", {
                 bookUpdate: {
+                    id: v4().toString(),
                     username: user.username,
                     title: book.title,
                     date: new Date().toISOString(),
@@ -53,6 +55,7 @@ const BookMutation = {
             const newRating = await UserRating.create({ user: user.id, book: bookId, rating });
             context.pubsub.publish("BOOK_UPDATED", {
                 bookUpdate: {
+                    id: v4().toString(),
                     username: user.username,
                     title: book.title,
                     date: new Date().toISOString(),

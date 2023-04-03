@@ -75,6 +75,7 @@ type CurrentUserBookStatus {
 }
 
 type BookUpdate {
+  id:ID!
   title: String!
   date: String!
   username: String!
