@@ -108,7 +108,7 @@ const BookMutation = {
 
     async updateBook(_, { bookId, title, author, date, coverImage, description }, context) {
         const user = checkAuth(context);
-        const { error } = bookValidationSchema.Mutation.updateBook.validate({ title, author, date, coverImage, description, bookid });
+        const { error } = bookValidationSchema.Mutation.updateBook.validate({ title, author, date, coverImage, description, bookId });
         if (error) {
             throw new Error(`Input validation error: ${error.message}`);
         }

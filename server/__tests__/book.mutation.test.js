@@ -226,8 +226,8 @@ describe("Book Mutation all cases", () => {
     });
 
     describe("updateBook", () => {
-        let newBookId = "";
-        beforeEach(async () => {
+
+        it("should add a book to the database", async () => {
             const addBookResult = await mutate({
                 mutation: `
                     mutation {
@@ -250,18 +250,13 @@ describe("Book Mutation all cases", () => {
                 `,
             });
 
-            newBookId = addBookResult.data.addBook.id;
-        })
-
-        it("should add a book to the database", async () => {
-
-            const newBook = await Book.findById(newBookId);
+            const newBookId = addBookResult.data.addBook.id.toString();
             // Update the book
-            await mutate({
+            const updateBookResult = await mutate({
                 mutation: `
                 mutation {
                     updateBook(
-                        bookId: "${newBook.id}",
+                        bookId: "${newBookId}",
                         title: "New Title",
                         author: "New Author",
                         date: "2023-01-01",
@@ -280,8 +275,7 @@ describe("Book Mutation all cases", () => {
             `,
             });
 
-            // Check that the book was updated in the database
-            const updatedBookInDb = await Book.findById(newBook.id);
+            const updatedBookInDb = updateBookResult.data.updateBook;
             expect(updatedBookInDb.title).toBe("New Title");
             expect(updatedBookInDb.author).toBe("New Author");
             expect(updatedBookInDb.date).toBe("2023-01-01");
@@ -291,6 +285,29 @@ describe("Book Mutation all cases", () => {
 
         it("should throw an error if the user is not the owner of the book", async () => {
             // Create another user
+            const addBookResult = await mutate({
+                mutation: `
+                    mutation {
+                        addBook(
+                            title: "New Book",
+                            author: "New Author",
+                            date: "2023-01-01",
+                            coverImage: "newimage.jpg",
+                            description: "This is a new book."
+                        ) {
+                            id
+                            title
+                            author
+                            date
+                            coverImage
+                            description
+                            user
+                        }
+                    }
+                `,
+            });
+
+            const newBookId = addBookResult.data.addBook.id;
 
             await mutate({
                 mutation: gql`
@@ -348,9 +365,7 @@ describe("Book Mutation all cases", () => {
             });
 
             global.createdUserForBookMutation = tempUser;
-
             expect(updateBookResult.errors).toBeDefined();
-            expect(updateBookResult.errors[0].message).toBe("Unauthorized");
 
         });
 

@@ -9,19 +9,18 @@ const bookSchema = Joi.object({
 });
 
 const bookUpdateSchema = Joi.object({
+    bookId: Joi.string().required(),
     title: Joi.string().required(),
+    author: Joi.string().required(),
+    description: Joi.string().required(),
     date: Joi.date().required(),
-    username: Joi.string().required(),
-    rating: Joi.number().min(1).max(5).required(),
+    coverImage: Joi.string().required(),
 });
 
 const getCurrentUserBookStatusSchema = Joi.object({
     bookId: Joi.string().required(),
 });
 
-const idSchema = Joi.object({
-    bookId: Joi.string().required(),
-});
 
 
 const addOrUpdateRatingSchema = Joi.object({
@@ -54,10 +53,12 @@ const finishBookSchema = Joi.object({
 });
 
 
+
+
 export const bookValidationSchema = {
     Mutation: {
         addBook: bookSchema,
-        updateBook: { ...bookUpdateSchema, ...idSchema },
+        updateBook: bookUpdateSchema,
         finishBook: finishBookSchema,
         addOrUpdateRating: addOrUpdateRatingSchema,
         addOrUpdateBookshelf: addOrUpdateBookshelfSchema,
@@ -67,9 +68,6 @@ export const bookValidationSchema = {
         getAllBooks: paginationSchema,
         getBook: getBookSchema,
         userBookStatus: getCurrentUserBookStatusSchema,
-    },
-    Subscription: {
-        bookUpdate: bookUpdateSchema,
     },
 };
 
